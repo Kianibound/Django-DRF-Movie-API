@@ -4,6 +4,9 @@ from rest_framework import serializers
 from movieAPP.models import Review, StreamPlatform, WatchList
 
 
+
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review

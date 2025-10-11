@@ -1,9 +1,38 @@
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import mixins, status, generics
 from movieAPP.models import Review, StreamPlatform, WatchList
 from movieAPP.api.serializers import ReviewSerializer, StreamPlatformSerializer, WatchListSerializer
+from rest_framework import viewsets
+
+
+class WatchListVS(viewsets.ModelViewSet):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+
+
+# class WatchListVS(viewsets.ViewSet):
+
+#     def list(self, request):
+#         queryset = WatchList.objects.all()
+#         serializer_class = WatchListSerializer(queryset, many=True)
+#         return Response(serializer_class.data)
+
+#     def retrieve(self, request, pk=None):
+#         queryset = WatchList.objects.all()
+#         watchlist = get_object_or_404(queryset, pk=pk)
+#         serializer = WatchListSerializer(watchlist)
+#         return Response(serializer.data)
+
+#     def create(self, request):
+#         serializer = WatchListSerializer( data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
 
 
 class WatchListAV(APIView):
