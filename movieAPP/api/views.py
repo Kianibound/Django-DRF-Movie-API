@@ -1,11 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from django.db.models import Avg
 # from django.shortcuts import get_object_or_404
 from movieAPP.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 # from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
-from rest_framework import  status, generics
+from rest_framework import status, generics
 from movieAPP.models import Review, StreamPlatform, WatchList
 from movieAPP.api.serializers import ReviewSerializer, StreamPlatformSerializer, WatchListSerializer
 from rest_framework import viewsets
@@ -70,7 +71,6 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [ReviewUserOrReadOnly]
-    
 
 
 class ReviewCreate(generics.CreateAPIView):
@@ -91,8 +91,21 @@ class ReviewCreate(generics.CreateAPIView):
         if review_queryset.exists():
             raise ValidationError("User has already posted a review")
 
-        # Save both the watchlist and the review_user on the review instance
+        if watchlist.avg_rating == 0:
+            watchlist.avg_rating = serializer.validated_data['rating']
+        else:
+            watchlist.avg_rating = (
+                watchlist.avg_rating + serializer.validated_data['rating']) / 2
+
         serializer.save(watchlist=watchlist, review_user=review_user)
+
+        agg = Review.objects.filter(watchlist=watchlist).aggregate(
+            avg_rating=Avg('rating'))
+        watchlist.number_of_ratings = Review.objects.filter(
+            watchlist=watchlist).count()
+        watchlist.avg_rating = agg['avg_rating'] or 0
+        watchlist.save()
+
 
 # class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 #     queryset = Review.objects.all()
