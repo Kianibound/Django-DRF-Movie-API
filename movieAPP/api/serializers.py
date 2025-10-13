@@ -1,7 +1,6 @@
-from django.forms import ValidationError, fields
-from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from rest_framework import serializers
 from movieAPP.models import Review, StreamPlatform, WatchList
+# from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 
 
 class ReviewSerializer(serializers.ModelSerializer):
