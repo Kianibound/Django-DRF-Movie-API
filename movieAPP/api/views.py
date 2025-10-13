@@ -1,5 +1,7 @@
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 # from django.shortcuts import get_object_or_404
+from movieAPP.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 # from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -61,11 +63,14 @@ class StreamPlatformDetailAV(APIView):
 class ReviewList(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [AdminOrReadOnly]
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [ReviewUserOrReadOnly]
+    
 
 
 class ReviewCreate(generics.CreateAPIView):
