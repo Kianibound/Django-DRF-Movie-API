@@ -64,7 +64,7 @@ class StreamPlatformDetailAV(APIView):
 class ReviewList(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):

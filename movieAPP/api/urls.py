@@ -11,7 +11,7 @@ router.register(r'list', WatchListVS, basename='list')
 urlpatterns = [
     path('', include(router.urls)),
 
-    path('list/<int:pk>/review-create',
+    path('list/<int:pk>/review-create/',
          ReviewCreate.as_view(), name="review-create"),
     path('list/<int:pk>/reviews/', ReviewList.as_view(), name='movie-detail'),
     path('list/rviews/<int:pk>/', ReviewDetail.as_view(), name='movie-detail'),
