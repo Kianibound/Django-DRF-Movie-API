@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from django.db.models import Avg
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 # from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from movieAPP.api.throttling import ReviewListThrottle, WatchListThrottle
 from movieAPP.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 # from rest_framework.decorators import api_view
@@ -17,6 +18,7 @@ from rest_framework import viewsets
 class WatchListAV(APIView):
     # permission_classes = [IsAdminOrReadOnly]
     throttle_classes = [WatchListThrottle]
+    
 
     def get(self, request):
         movies = WatchList.objects.all()
@@ -70,6 +72,8 @@ class ReviewList(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     throttle_classes = [ReviewListThrottle]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['review_user__username', 'active']
     # permission_classes = [IsAuthenticated]
 
 

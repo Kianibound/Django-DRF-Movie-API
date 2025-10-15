@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from django.db import router
 
-from movieAPP.api.views import ReviewCreate, ReviewDetail, ReviewList, StreamPlatformVS, WatchListAV, WatchListDetailAV
+from movieAPP.api.views import  ReviewCreate, ReviewDetail, ReviewList, StreamPlatformVS, WatchListAV, WatchListDetailAV
 
 
 router = DefaultRouter()
