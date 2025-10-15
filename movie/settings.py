@@ -148,7 +148,9 @@ REST_FRAMEWORK = {
         # 'user': '10/day',
         'watchlist': '5/min',
         'review-list': '3/min'
-    }
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
 }
 
 
