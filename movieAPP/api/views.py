@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.db.models import Avg
 # from django.shortcuts import get_object_or_404
-from movieAPP.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from movieAPP.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 # from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -12,20 +12,16 @@ from movieAPP.api.serializers import ReviewSerializer, StreamPlatformSerializer,
 from rest_framework import viewsets
 
 
-class WatchListVS(viewsets.ModelViewSet):
-    queryset = WatchList.objects.all()
-    serializer_class = WatchListSerializer
+class WatchListAV(APIView):
+    # permission_classes = [IsAdminOrReadOnly]
 
-
-class StreamPlatformAV(APIView):
     def get(self, request):
-        streams = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(
-            streams, many=True, context={'request': request})
+        movies = WatchList.objects.all()
+        serializer = WatchListSerializer(movies, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = StreamPlatformSerializer(data=request.data)
+        serializer = WatchListSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -34,21 +30,21 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors)
 
 
-class StreamPlatformDetailAV(APIView):
+class WatchListDetailAV(APIView):
+    permission_classes = [IsReviewUserOrReadOnly]
 
     def get(self, request, pk):
         try:
-            platform = StreamPlatform.objects.get(pk=pk)
-        except StreamPlatform.DoesNotExist:
+            movie = WatchList.objects.get(pk=pk)
+        except WatchList.DoesNotExist:
             return Response({'Error: Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = StreamPlatformSerializer(
-            platform, context={'request': request})
+        serializer = WatchListSerializer(movie)
         return Response(serializer.data)
 
     def put(self, request, pk):
-        platform = StreamPlatform.objects.get(pk=pk)
-        serializer = StreamPlatformSerializer(platform, data=request.data)
+        movie = WatchList.objects.get(pk=pk)
+        serializer = WatchListSerializer(movie, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -56,25 +52,32 @@ class StreamPlatformDetailAV(APIView):
             return Response(serializer.errors)
 
     def delete(self, request, pk):
-        movie = StreamPlatform.objects.get(pk=pk)
+        movie = WatchList.objects.get(pk=pk)
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class StreamPlatformVS(viewsets.ModelViewSet):
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class ReviewList(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [ReviewUserOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Review.objects.all()
@@ -106,6 +109,49 @@ class ReviewCreate(generics.CreateAPIView):
         watchlist.avg_rating = agg['avg_rating'] or 0
         watchlist.save()
 
+
+# class StreamPlatformAV(APIView):
+#     def get(self, request):
+#         streams = StreamPlatform.objects.all()
+#         serializer = StreamPlatformSerializer(
+#             streams, many=True, context={'request': request})
+#         return Response(serializer.data)
+
+#     def post(self, request):
+#         serializer = StreamPlatformSerializer(data=request.data)
+
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
+
+
+# class StreamPlatformDetailAV(APIView):
+
+#     def get(self, request, pk):
+#         try:
+#             platform = StreamPlatform.objects.get(pk=pk)
+#         except StreamPlatform.DoesNotExist:
+#             return Response({'Error: Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+#         serializer = StreamPlatformSerializer(
+#             platform, context={'request': request})
+#         return Response(serializer.data)
+
+#     def put(self, request, pk):
+#         platform = StreamPlatform.objects.get(pk=pk)
+#         serializer = StreamPlatformSerializer(platform, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.errors)
+
+#     def delete(self, request, pk):
+#         movie = StreamPlatform.objects.get(pk=pk)
+#         movie.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 #     queryset = Review.objects.all()
@@ -188,22 +234,6 @@ class ReviewCreate(generics.CreateAPIView):
 
 #     def create(self, request):
 #         serializer = WatchListSerializer( data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors)
-
-
-# class WatchListAV(APIView):
-#     def get(self, request):
-#         movies = WatchList.objects.all()
-#         serializer = WatchListSerializer(movies, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request):
-#         serializer = WatchListSerializer(data=request.data)
-
 #         if serializer.is_valid():
 #             serializer.save()
 #             return Response(serializer.data)
