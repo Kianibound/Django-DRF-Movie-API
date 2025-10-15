@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from datetime import timedelta
+# from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,16 +132,26 @@ REST_FRAMEWORK = {
     #     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
-        #     'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
 
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ],
+    'DEFAULT_THROTTLE_RATES': {
+        # 'anon': '5/day',
+        # 'user': '10/day',
+        'watchlist': '5/min',
+        'review-list': '3/min'
+    }
 }
 
 
-SIMPLE_JWT = {
-    'ROTATE_REFRESH_TOKENS': True,
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
-}
+# SIMPLE_JWT = {
+#     'ROTATE_REFRESH_TOKENS': True,
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+# }
