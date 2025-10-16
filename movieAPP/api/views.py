@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from django.db.models import Avg
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.renderers import JSONRenderer
 # from django.shortcuts import get_object_or_404
 from movieAPP.api.pagination import WatchListLOPagination, WatchListPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -85,7 +86,7 @@ class MovieListGV(generics.ListAPIView):
     search_fields = ['title']
     ordering_fields = ['avg_rating']
     pagination_class = WatchListLOPagination
-
+    renderer_classes = [JSONRenderer]
     # permission_classes = [IsAuthenticated]
 
 

@@ -1,4 +1,6 @@
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.pagination import CursorPagination, LimitOffsetPagination, PageNumberPagination
+
+from movieAPP.models import WatchList
 
 
 class WatchListPagination(PageNumberPagination):
@@ -6,7 +8,7 @@ class WatchListPagination(PageNumberPagination):
     page_size_query_param = 'size'
     max_page_size = 10
     last_page_strings = 'end'
-    
+
 
 class WatchListLOPagination(LimitOffsetPagination):
     default_limit = 3

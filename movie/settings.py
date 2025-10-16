@@ -131,7 +131,10 @@ REST_FRAMEWORK = {
     #     'DEFAULT_PERMISSION_CLASSES': [
     #         'rest_framework.permissions.IsAuthenticated',
     #     ],
-
+    'DFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -150,7 +153,8 @@ REST_FRAMEWORK = {
         'review-list': '3/min'
     },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+
 }
 
 
