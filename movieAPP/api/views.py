@@ -4,7 +4,7 @@ from django.db.models import Avg
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.filters import OrderingFilter, SearchFilter
 # from django.shortcuts import get_object_or_404
-from movieAPP.api.pagination import WatchListPagination
+from movieAPP.api.pagination import WatchListLOPagination, WatchListPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from movieAPP.api.throttling import ReviewListThrottle, WatchListThrottle
 from movieAPP.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
@@ -84,7 +84,7 @@ class MovieListGV(generics.ListAPIView):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title']
     ordering_fields = ['avg_rating']
-    pagination_class = WatchListPagination
+    pagination_class = WatchListLOPagination
 
     # permission_classes = [IsAuthenticated]
 
