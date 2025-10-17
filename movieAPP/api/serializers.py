@@ -16,15 +16,17 @@ class ReviewSerializer(serializers.ModelSerializer):
 class WatchListSerializer(serializers.ModelSerializer):
     # len_name = serializers.SerializerMethodField()
     reviews = ReviewSerializer(many=True, read_only=True)
-    platform  = serializers.CharField(source='platform.name')
+    platform = serializers.CharField(source='platform.name', read_only=True)
+    platform_id = serializers.PrimaryKeyRelatedField(
+        source='platform', queryset=StreamPlatform.objects.all(), write_only=True, required=False
+    )
 
     class Meta:
         model = WatchList
         fields = "__all__"
-        # exclude = ['id']
 
 
-class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
+class StreamPlatformSerializer(serializers.ModelSerializer):
     watchlist = WatchListSerializer(many=True, read_only=True)
 
     class Meta:
