@@ -1,11 +1,10 @@
 from django.urls import reverse
 from django.contrib.auth.models import User
-from rest_framework import response, status
+from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
 from movieAPP.models import Review, StreamPlatform, WatchList
-from movieAPP.api import serializers
 
 
 class WatchlistTestCase(APITestCase):
@@ -95,13 +94,6 @@ class ReviewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_review_update(self):
-        # review = Review.objects.create(
-        #     review_user=self.user,
-        #     rating=5,
-        #     description='Test Description',
-        #     watchlist=self.watchlist,
-        #     active=True
-        # )
         data = {
             'review_user': self.user.id,
             'rating': 4,

@@ -21,10 +21,6 @@ urlpatterns = [
     path('list/rviews/<int:pk>/', ReviewDetail.as_view(),
          name='movie-review-detail'),
 
-    # path('streams/', StreamPlatformVS.as_view(), name="streams"),
-    # path('streams/<int:pk>', StreamPlatformVS.as_view(),
-    #      name="streamplatform-detail"),
-
     path('reviews/', ReviewList.as_view(), name="reviews"),
     path('reviews/<int:pk>/', ReviewDetail.as_view(), name="review-detail")
 ]

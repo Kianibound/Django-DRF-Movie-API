@@ -128,9 +128,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    #     'DEFAULT_PERMISSION_CLASSES': [
-    #         'rest_framework.permissions.IsAuthenticated',
-    #     ],
     'DFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -138,17 +135,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    # 'DEFAULT_THROTTLE_CLASSES': [
-    #     'rest_framework.throttling.AnonRateThrottle',
-    #     'rest_framework.throttling.UserRateThrottle'
-    # ],
     'DEFAULT_THROTTLE_RATES': {
-        # 'anon': '5/day',
-        # 'user': '10/day',
         'watchlist': '5/min',
         'review-list': '3/min'
     },
@@ -156,7 +145,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 
 }
-
 
 # SIMPLE_JWT = {
 #     'ROTATE_REFRESH_TOKENS': True,
